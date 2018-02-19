@@ -1,0 +1,43 @@
+{
+  "name": "blogspot",
+  "version": "1.0.0",
+  "description": "an implementation of blogspot backend services",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test mocha --timeout 10000",
+    "start": "NODE_ENV=dev nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M-E-W-B/blogspot.git"
+  },
+  "keywords": [
+    "expressjs",
+    "nodejs",
+    "blog",
+    "mongoose"
+  ],
+  "author": "kshirish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/M-E-W-B/blogspot/issues"
+  },
+  "homepage": "https://github.com/M-E-W-B/blogspot#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.1",
+    "lodash": "^4.17.5",
+    "mongoose": "^5.0.6"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "mocha": "^5.0.1",
+    "mockgoose": "^7.3.5"
+  }
+}

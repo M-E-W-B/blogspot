@@ -1,0 +1,12 @@
+{
+  "secret": "what's the rumpus",
+  "database": {
+    "dev": "mongodb://localhost:27017/blogspot",
+    "test": "mongodb://localhost:27017/blogspot_test",
+    "options": {
+      "autoIndex": false,
+      "poolSize": 10,
+      "bufferMaxEntries": 0
+    }
+  }
+}
