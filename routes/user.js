@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const pick = require("lodash");
+const { pick } = require("lodash");
 
 module.exports = router => {
   router.delete("/user/:id", (req, res, next) => {
