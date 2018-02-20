@@ -21,4 +21,3 @@ module.exports = mongoose.model(
     createdAt: { type: Date, default: Date.now }
   })
 );
-l;
