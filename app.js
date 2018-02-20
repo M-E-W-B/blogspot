@@ -9,6 +9,8 @@ app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
 app.use("/api/v1", router);
 
+require("./routes/unauthenticated")(router);
+
 if (process.env.NODE_ENV === "dev") require("./middlewares")(router);
 
 require("./routes")(router);
