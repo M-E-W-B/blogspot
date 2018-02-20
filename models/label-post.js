@@ -5,8 +5,16 @@ const Schema = mongoose.Schema;
 module.exports = mongoose.model(
   "LabelPost",
   new Schema({
-    labelId: { type: Schema.Types.ObjectId, ref: "Label" },
-    postId: { type: Schema.Types.ObjectId, ref: "Post" },
+    labelId: {
+      type: Schema.Types.ObjectId,
+      ref: "Label",
+      required: true
+    },
+    postId: {
+      type: Schema.Types.ObjectId,
+      ref: "Post",
+      required: true
+    },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     updatedAt: { type: Date },
     createdAt: { type: Date, default: Date.now }

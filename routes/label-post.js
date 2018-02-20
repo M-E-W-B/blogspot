@@ -26,16 +26,12 @@ module.exports = router => {
   });
 
   // get all labels of a post
-  // @TODO: pagination is not needed here
   router.get("/post/:postId/label", (req, res, next) => {
-    const page = req.query.page ? +req.query.page : 1;
-    const limit = req.query.limit ? +req.query.limit : 10;
+    const { postId } = req.params;
     const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
-    LabelPost.find({})
+    LabelPost.find({ postId })
       .sort(sortOptions)
-      .skip(limit * page - limit)
-      .limit(limit)
       .then(labelPosts => res.json(labelPosts))
       .catch(next);
   });

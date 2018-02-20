@@ -2,6 +2,7 @@ const User = require("../models/user");
 const { pick } = require("lodash");
 
 module.exports = router => {
+  // delete a user
   router.delete("/user/:id", (req, res, next) => {
     const userId = req.params.id;
 
@@ -10,6 +11,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // get a user
   router.get("/user/:id", (req, res, next) => {
     const userId = req.params.id;
 
@@ -18,6 +20,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // edit basic details of a user
   router.put("/user/:id", (req, res, next) => {
     const userId = req.params.id;
     const options = { new: true };
@@ -30,6 +33,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // get all the users (paginated) in the database
   router.get("/user", (req, res, next) => {
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;

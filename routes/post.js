@@ -2,6 +2,7 @@ const Post = require("../models/post");
 const { pick } = require("lodash");
 
 module.exports = router => {
+  // create a post
   router.post("/post", (req, res, next) => {
     const obj = pick(req.body, ["title", "body", "status"]);
 
@@ -15,6 +16,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // delete a post
   router.delete("/post/:id", (req, res, next) => {
     const postId = req.params.id;
 
@@ -23,7 +25,7 @@ module.exports = router => {
       .catch(next);
   });
 
-  // seperate api for changing status
+  // change status of a post i.e. drafted, published
   router.put("/post/:id/status/:status", (req, res, next) => {
     const { id: postId, status } = req.params;
     const options = { new: true };
@@ -32,11 +34,14 @@ module.exports = router => {
       updatedAt: Date.now()
     };
 
+    if (!status) return next(new Error("Status is not provided!"));
+
     Blog.findByIdAndUpdate(postId, obj, options)
       .then(post => res.json(post))
       .catch(next);
   });
 
+  // edit a post
   router.put("/post/:id", (req, res, next) => {
     const postId = req.params.id;
     const options = { new: true };
@@ -49,6 +54,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // get a post
   router.get("/post/:id", (req, res, next) => {
     const postId = req.params.id;
 
@@ -57,6 +63,13 @@ module.exports = router => {
       .catch(next);
   });
 
+  // get full post i.e. comments, labels
+  // @TODO
+  router.get("/post/:id/full", (req, res, next) => {
+    const postId = req.params.id;
+  });
+
+  // get all the posts (paginated) in the database
   router.get("/post", (req, res, next) => {
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;

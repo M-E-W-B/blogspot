@@ -2,6 +2,7 @@ const Label = require("../models/label");
 const { pick } = require("lodash");
 
 module.exports = router => {
+  // create a label
   router.post("/label", (req, res, next) => {
     const obj = pick(req.body, ["txt"]);
 
@@ -15,6 +16,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // delete a label
   router.delete("/label/:id", (req, res, next) => {
     const labelId = req.params.id;
 
@@ -23,6 +25,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // edit a label
   router.put("/label/:id", (req, res, next) => {
     const labelId = req.params.id;
     const options = { new: true };
@@ -35,6 +38,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // get a label
   router.get("/label/:id", (req, res, next) => {
     const labelId = req.params.id;
 
@@ -43,6 +47,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // get all the labels (paginated) in the database
   router.get("/label", (req, res, next) => {
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;

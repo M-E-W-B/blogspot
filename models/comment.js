@@ -6,7 +6,11 @@ module.exports = mongoose.model(
   "Comment",
   new Schema({
     txt: { type: String },
-    postId: { type: Schema.Types.ObjectId, ref: "Post" },
+    postId: {
+      type: Schema.Types.ObjectId,
+      ref: "Post",
+      required: true
+    },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     updatedAt: { type: Date },
     createdAt: { type: Date, default: Date.now }

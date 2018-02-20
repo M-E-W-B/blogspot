@@ -9,7 +9,8 @@ module.exports = mongoose.model(
     body: { type: String, required: true },
     status: {
       type: String,
-      enum: ["DRAFTED", "PUBLISHED"]
+      enum: ["DRAFTED", "PUBLISHED"],
+      required: true
     },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     updatedAt: { type: Date },

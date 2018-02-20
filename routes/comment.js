@@ -2,6 +2,7 @@ const Comment = require("../models/comment");
 const { pick } = require("lodash");
 
 module.exports = router => {
+  // add a comment to a post
   router.post("/comment", (req, res, next) => {
     const obj = pick(req.body, ["txt", "postId"]);
 
@@ -15,6 +16,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // delete a comment
   router.delete("/comment/:id", (req, res, next) => {
     const commentId = req.params.id;
 
@@ -23,6 +25,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // edit a comment
   router.put("/comment/:id", (req, res, next) => {
     const commentId = req.params.id;
     const options = { new: true };
@@ -35,6 +38,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // get a comment
   router.get("/comment/:id", (req, res, next) => {
     const commentId = req.params.id;
 
@@ -43,6 +47,7 @@ module.exports = router => {
       .catch(next);
   });
 
+  // list of all comments (paginated) in the database
   router.get("/comment", (req, res, next) => {
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;

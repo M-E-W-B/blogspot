@@ -7,11 +7,13 @@ module.exports = mongoose.model(
   new Schema({
     postId: {
       type: Schema.Types.ObjectId,
-      ref: "Post"
+      ref: "Post",
+      required: true
     },
     blogId: {
       type: Schema.Types.ObjectId,
-      ref: "Blog"
+      ref: "Blog",
+      required: true
     },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     updatedAt: { type: Date },
