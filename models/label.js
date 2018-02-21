@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 module.exports = mongoose.model(
   "Label",
   new Schema({
-    txt: { type: String },
+    txt: { type: String, required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     updatedAt: { type: Date },
     createdAt: { type: Date, default: Date.now }

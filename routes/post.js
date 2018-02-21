@@ -25,18 +25,16 @@ module.exports = router => {
       .catch(next);
   });
 
-  // change status of a post i.e. drafted, published
-  router.put("/post/:id/status/:status", (req, res, next) => {
-    const { id: postId, status } = req.params;
+  // publish a post
+  router.put("/post/:id/publish", (req, res, next) => {
+    const { id: postId } = req.params;
     const options = { new: true };
     const obj = {
-      status,
+      status: "PUBLISHED",
       updatedAt: Date.now()
     };
 
-    if (!status) return next(new Error("Status is not provided!"));
-
-    Blog.findByIdAndUpdate(postId, obj, options)
+    Post.findByIdAndUpdate(postId, obj, options)
       .then(post => res.json(post))
       .catch(next);
   });
