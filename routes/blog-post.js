@@ -18,9 +18,9 @@ module.exports = router => {
 
   // delete a post from a blog
   router.delete("/blog/:blogId/post/:postId", (req, res, next) => {
-    const blogPostId = req.params.id;
+    const { blogId, postId } = req.params;
 
-    BlogPost.remove({ _id: blogPostId })
+    BlogPost.remove({ blogId, postId })
       .then(result => res.json(result))
       .catch(next);
   });
