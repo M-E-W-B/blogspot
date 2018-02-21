@@ -1,7 +1,13 @@
 const LabelPost = require("../models/label-post");
+const UserBlog = require("../models/user-blog");
 const Comment = require("../models/comment");
 const Post = require("../models/post");
 const { pick } = require("lodash");
+const { ObjectId } = require("mongoose").Types;
+
+function isDate(v) {
+  return Object.prototype.toString.call(v) === "[object Date]";
+}
 
 module.exports = router => {
   // create a post
@@ -88,15 +94,83 @@ module.exports = router => {
   });
 
   // get all the posts (paginated) in the database
+  // filter by time interval
   router.get("/post", (req, res, next) => {
+    const { start, end, sort, search } = req.query;
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;
-    const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
+    let scoreObj = {};
+    let sortOptions = {};
+    let searchOptions = {};
 
-    Post.find({})
+    if (search) {
+      sortOptions = scoreObj = { score: { $meta: "textScore" } };
+      searchOptions = {
+        $text: {
+          $search: search
+        }
+      };
+    } else if (sort) {
+      sortOptions = { [sort]: 1 };
+    }
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    if (isDate(startDate) && isDate(endDate) && endDate > startDate) {
+      searchOptions.createdAt = {
+        $gte: startDate,
+        $lte: endDate
+      };
+    }
+
+    Post.find(searchOptions, scoreObj)
       .sort(sortOptions)
       .skip(limit * page - limit)
       .limit(limit)
+      .then(posts => res.json(posts))
+      .catch(next);
+  });
+
+  // list posts from their own blogs and the blogs they follow
+  router.get("/feed", (req, res, next) => {
+    const userId = req.decoded._id;
+
+    UserBlog.aggregate([
+      {
+        $lookup: {
+          from: "posts",
+          localField: "blogId",
+          foreignField: "blogId",
+          as: "post_docs"
+        }
+      },
+      { $limit: 20 },
+      { $unwind: "$post_docs" },
+      { $sort: { "post_docs.createdAt": -1 } },
+      {
+        $match: {
+          $or: [
+            {
+              userId: ObjectId(userId)
+            },
+            { "post_docs.createdBy": ObjectId(userId) }
+          ],
+          "post_docs.status": "PUBLISHED"
+        }
+      },
+      {
+        $project: {
+          userId: 1,
+          "post_docs._id": 1,
+          "post_docs.blogId": 1,
+          "post_docs.title": 1,
+          "post_docs.body": 1,
+          "post_docs.status": 1,
+          "post_docs.createdAt": 1
+        }
+      }
+    ])
       .then(posts => res.json(posts))
       .catch(next);
   });

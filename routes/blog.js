@@ -82,11 +82,25 @@ module.exports = router => {
   // list of all posts of a blog (paginated)
   router.get("/blog/:blogId/post", (req, res, next) => {
     const { blogId } = req.params;
+    const { sort, status = "ACTIVE", search } = req.query;
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;
-    const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
+    let scoreObj = {};
+    let sortOptions = {};
+    let searchOptions = { status };
 
-    Post.find({ blogId })
+    if (search) {
+      sortOptions = scoreObj = { score: { $meta: "textScore" } };
+      searchOptions.$text = {
+        $search: search
+      };
+    } else if (sort) {
+      sortOptions = { [sort]: 1 };
+    }
+
+    if (blogId) searchOptions.blogId = blogId;
+
+    Post.find(searchOptions, scoreObj)
       .sort(sortOptions)
       .skip(limit * page - limit)
       .limit(limit)
@@ -108,12 +122,23 @@ module.exports = router => {
 
   // list of all blogs (paginated)
   router.get("/blog", (req, res, next) => {
-    const { sort, status = "ACTIVE" } = req.query;
+    const { sort, status = "ACTIVE", search } = req.query;
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;
-    const sortOptions = sort ? { [sort]: 1 } : {};
+    let scoreObj = {};
+    let sortOptions = {};
+    let searchOptions = { status };
 
-    Blog.find({ status })
+    if (search) {
+      sortOptions = scoreObj = { score: { $meta: "textScore" } };
+      searchOptions.$text = {
+        $search: search
+      };
+    } else if (sort) {
+      sortOptions = { [sort]: 1 };
+    }
+
+    Blog.find(searchOptions, scoreObj)
       .sort(sortOptions)
       .skip(limit * page - limit)
       .limit(limit)

@@ -51,9 +51,22 @@ module.exports = router => {
   router.get("/label", (req, res, next) => {
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;
-    const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
+    let scoreObj = {};
+    let sortOptions = {};
+    let searchOptions = {};
 
-    Label.find({})
+    if (req.query.search) {
+      sortOptions = scoreObj = { score: { $meta: "textScore" } };
+      searchOptions = {
+        $text: {
+          $search: req.query.search
+        }
+      };
+    } else if (req.query.sort) {
+      sortOptions = { [req.query.sort]: 1 };
+    }
+
+    Label.find(searchOptions, scoreObj)
       .sort(sortOptions)
       .skip(limit * page - limit)
       .limit(limit)

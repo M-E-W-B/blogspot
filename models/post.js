@@ -1,24 +1,31 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// set up a mongoose model
-module.exports = mongoose.model(
-  "Post",
-  new Schema({
-    title: { type: String, required: true },
-    body: { type: String, required: true },
-    status: {
-      type: String,
-      enum: ["DRAFTED", "PUBLISHED"],
-      required: true
-    },
-    blogId: {
-      type: Schema.Types.ObjectId,
-      ref: "Blog",
-      required: true
-    },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User" },
-    updatedAt: { type: Date },
-    createdAt: { type: Date, default: Date.now }
-  })
+const postSchema = new Schema({
+  title: { type: String, required: true },
+  body: { type: String, required: true },
+  status: {
+    type: String,
+    enum: ["DRAFTED", "PUBLISHED"],
+    required: true
+  },
+  blogId: {
+    type: Schema.Types.ObjectId,
+    ref: "Blog",
+    required: true
+  },
+  createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+  updatedAt: { type: Date },
+  createdAt: { type: Date, default: Date.now }
+});
+
+postSchema.index(
+  {
+    title: "text",
+    body: "text"
+  },
+  { weights: { title: 3, body: 1 } }
 );
+
+// set up a mongoose model
+module.exports = mongoose.model("Post", postSchema);
