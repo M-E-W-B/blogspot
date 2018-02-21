@@ -1,10 +1,10 @@
 module.exports = router => {
-  require("./blog");
-  require("./user");
-  require("./post");
-  require("./label");
-  require("./comment");
-  require("./user-blog");
-  require("./blog-post");
-  require("./label-post");
+  require("./blog")(router);
+  require("./user")(router);
+  require("./post")(router);
+  require("./label")(router);
+  require("./comment")(router);
+  require("./user-blog")(router);
+  require("./blog-post")(router);
+  require("./label-post")(router);
 };

@@ -10,9 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-f
 app.use("/api/v1", router);
 
 require("./routes/unauthenticated")(router);
-
-if (process.env.NODE_ENV === "dev") require("./middlewares")(router);
-
+require("./middlewares")(router);
 require("./routes")(router);
 
 app.use((err, req, res, next) => {

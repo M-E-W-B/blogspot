@@ -11,7 +11,7 @@ module.exports = mongoose.model(
     status: {
       type: String,
       enum: ["ACTIVE", "INACTIVE"],
-      required: true
+      default: "ACTIVE"
     },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     updatedAt: { type: Date },

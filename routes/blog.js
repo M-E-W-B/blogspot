@@ -34,8 +34,6 @@ module.exports = router => {
       updatedAt: Date.now()
     };
 
-    if (!status) return next(new Error("Status is not provided!"));
-
     Blog.findByIdAndUpdate(blogId, obj, options)
       .then(blog => res.json(blog))
       .catch(next);

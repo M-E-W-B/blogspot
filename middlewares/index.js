@@ -1,3 +1,3 @@
-module.exports = () => {
-  require("./verify");
+module.exports = router => {
+  require("./verify")(router);
 };
