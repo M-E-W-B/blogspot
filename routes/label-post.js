@@ -31,6 +31,7 @@ module.exports = router => {
     const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
     LabelPost.find({ postId })
+      .populate("labelId")
       .sort(sortOptions)
       .then(labelPosts => res.json(labelPosts))
       .catch(next);

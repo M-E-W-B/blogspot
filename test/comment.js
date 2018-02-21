@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt-nodejs");
 const chaiHttp = require("chai-http");
 const Comment = require("../models/comment");
 const Post = require("../models/post");
+const Blog = require("../models/blog");
 const User = require("../models/user");
 const app = require("../app");
 const { MongooseConnect } = require("../utils");
@@ -26,11 +27,11 @@ function setGlobals() {
     gender: "FEMALE"
   });
 
-  const post = new Post({
-    title: "Let's jump together!",
-    body:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "DRAFTED"
+  const blog = new Blog({
+    name: "The Synesthesia Project",
+    subdomain: "papercupplastic",
+    description:
+      "My attention that I have a common form of synesthesia known as grapheme to color synesthesia. It is according to Wikipedia....who are always right...right?"
   });
 
   const tokenPromise = user
@@ -52,9 +53,24 @@ function setGlobals() {
       throw err;
     });
 
-  const postIdPromise = post
+  const postIdPromise = blog
     .save()
-    .then(post => post.id)
+    .then(blog => {
+      const post = new Post({
+        title: "Let's jump together!",
+        body:
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        status: "DRAFTED",
+        blogId: blog._id
+      });
+
+      return post
+        .save()
+        .then(post => post.id)
+        .catch(err => {
+          throw err;
+        });
+    })
     .catch(err => {
       throw err;
     });

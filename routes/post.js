@@ -1,10 +1,12 @@
+const LabelPost = require("../models/label-post");
+const Comment = require("../models/comment");
 const Post = require("../models/post");
 const { pick } = require("lodash");
 
 module.exports = router => {
   // create a post
   router.post("/post", (req, res, next) => {
-    const obj = pick(req.body, ["title", "body", "status"]);
+    const obj = pick(req.body, ["title", "body", "status", "blogId"]);
 
     obj.createdBy = req.decoded._id;
 
@@ -61,10 +63,28 @@ module.exports = router => {
       .catch(next);
   });
 
+  // get comments of a post
+  router.get("/post/:id/comment", (req, res, next) => {
+    const postId = req.params.id;
+    Comment.find({ postId })
+      .then(comments => res.json(comments))
+      .catch(next);
+  });
+
   // get full post i.e. comments, labels
-  // @TODO
   router.get("/post/:id/full", (req, res, next) => {
     const postId = req.params.id;
+    const postPromise = Post.findById(postId).lean();
+    const commentsPromise = Comment.find({ postId });
+    const labelsPromise = LabelPost.find({ postId });
+
+    Promise.all([postPromise, commentsPromise, labelsPromise])
+      .then(([post, comments, labels]) => {
+        post.comments = comments;
+        post.labels = labels;
+        res.json(post);
+      })
+      .catch(next);
   });
 
   // get all the posts (paginated) in the database

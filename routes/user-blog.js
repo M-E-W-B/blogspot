@@ -34,6 +34,7 @@ module.exports = router => {
 
     UserBlog.find({ userId })
       .sort(sortOptions)
+      .populate("blogId")
       .then(userBlogs => res.json(userBlogs))
       .catch(next);
   });

@@ -5,6 +5,5 @@ module.exports = router => {
   require("./label")(router);
   require("./comment")(router);
   require("./user-blog")(router);
-  require("./blog-post")(router);
   require("./label-post")(router);
 };

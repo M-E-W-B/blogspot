@@ -1,6 +1,7 @@
 const chai = require("chai");
 const bcrypt = require("bcrypt-nodejs");
 const chaiHttp = require("chai-http");
+const Blog = require("../models/blog");
 const Post = require("../models/post");
 const User = require("../models/user");
 const app = require("../app");
@@ -10,6 +11,7 @@ const should = chai.should();
 const baseUrl = "/api/v1";
 
 let token;
+let blogId;
 
 chai.use(chaiHttp);
 
@@ -24,7 +26,14 @@ function setGlobals() {
     gender: "FEMALE"
   });
 
-  return user
+  const blog = new Blog({
+    name: "The Synesthesia Project",
+    subdomain: "papercupplastic",
+    description:
+      "My attention that I have a common form of synesthesia known as grapheme to color synesthesia. It is according to Wikipedia....who are always right...right?"
+  });
+
+  const tokenPromise = user
     .save()
     .then(user => {
       return chai
@@ -33,11 +42,24 @@ function setGlobals() {
         .send({
           email: "Aileen82@gmail.com",
           password: "hell00"
+        })
+        .then(res => res.body.token)
+        .catch(err => {
+          throw err;
         });
     })
     .catch(err => {
       throw err;
     });
+
+  const blogIdPromise = blog
+    .save()
+    .then(blog => blog.id)
+    .catch(err => {
+      throw err;
+    });
+
+  return Promise.all([tokenPromise, blogIdPromise]);
 }
 
 describe("Post Routes", () => {
@@ -45,8 +67,9 @@ describe("Post Routes", () => {
     MongooseConnect.open()
       .then(() => {
         setGlobals()
-          .then(res => {
-            token = res.body.token;
+          .then(([tkn, bId]) => {
+            token = tkn;
+            blogId = bId;
             done();
           })
           .catch(done);
@@ -78,7 +101,8 @@ describe("Post Routes", () => {
       const post = {
         body:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        status: "DRAFTED"
+        status: "DRAFTED",
+        blogId
       };
       chai
         .request(app)
@@ -97,7 +121,8 @@ describe("Post Routes", () => {
     it("it should not POST a post without body field", done => {
       const post = {
         title: "Let's jump together!",
-        status: "DRAFTED"
+        status: "DRAFTED",
+        blogId
       };
       chai
         .request(app)
@@ -113,11 +138,33 @@ describe("Post Routes", () => {
           done();
         });
     });
+    it("it should not POST a post without blogId field", done => {
+      const post = {
+        title: "Let's jump together!",
+        body:
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        status: "DRAFTED"
+      };
+      chai
+        .request(app)
+        .post(baseUrl + "/post")
+        .set("x-access-token", token)
+        .send(post)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have.property("errors");
+          res.body.errors.should.have.property("blogId");
+          res.body.errors.blogId.should.have.property("kind").eql("required");
+          done();
+        });
+    });
     it("it should not POST a post without status field", done => {
       const post = {
         title: "Let's jump together!",
         body:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        blogId
       };
       chai
         .request(app)
@@ -138,7 +185,8 @@ describe("Post Routes", () => {
         title: "Let's jump together!",
         body:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        status: "DRAFTED"
+        status: "DRAFTED",
+        blogId
       };
       chai
         .request(app)
@@ -161,7 +209,8 @@ describe("Post Routes", () => {
         title: "Let's jump together!",
         body:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        status: "DRAFTED"
+        status: "DRAFTED",
+        blogId
       });
       post.save((err, post) => {
         chai
@@ -187,7 +236,8 @@ describe("Post Routes", () => {
         title: "Let's jump together!",
         body:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        status: "PUBLISHED"
+        status: "PUBLISHED",
+        blogId
       });
       post.save((err, post) => {
         chai
@@ -210,7 +260,8 @@ describe("Post Routes", () => {
         title: "Let's jump together!",
         body:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        status: "PUBLISHED"
+        status: "PUBLISHED",
+        blogId
       });
       post.save((err, post) => {
         chai
@@ -235,7 +286,8 @@ describe("Post Routes", () => {
         title: "Let's jump together!",
         body:
           "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        status: "PUBLISHED"
+        status: "PUBLISHED",
+        blogId
       });
       post.save((err, post) => {
         chai
