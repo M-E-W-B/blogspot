@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 module.exports = mongoose.model(
   "Comment",
   new Schema({
-    txt: { type: String },
+    txt: { type: String, required: true },
     postId: {
       type: Schema.Types.ObjectId,
       ref: "Post",

@@ -13,7 +13,7 @@ let token;
 
 chai.use(chaiHttp);
 
-function setToken(done) {
+function setGlobals() {
   const user = new User({
     name: "Reilly Boyer",
     email: "Aileen82@gmail.com",
@@ -24,26 +24,32 @@ function setToken(done) {
     gender: "FEMALE"
   });
 
-  user.save((err, user) => {
-    chai
-      .request(app)
-      .post(baseUrl + "/login")
-      .send({
-        email: "Aileen82@gmail.com",
-        password: "hell00"
-      })
-      .end((err, res) => {
-        token = res.body.token;
-        done();
-      });
-  });
+  return user
+    .save()
+    .then(user => {
+      return chai
+        .request(app)
+        .post(baseUrl + "/login")
+        .send({
+          email: "Aileen82@gmail.com",
+          password: "hell00"
+        });
+    })
+    .catch(err => {
+      throw err;
+    });
 }
 
 describe("Label Routes", () => {
   before(function(done) {
     MongooseConnect.open()
       .then(() => {
-        setToken(done);
+        setGlobals()
+          .then(res => {
+            token = res.body.token;
+            done();
+          })
+          .catch(done);
       })
       .catch(done);
   });
