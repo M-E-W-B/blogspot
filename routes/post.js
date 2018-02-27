@@ -1,9 +1,7 @@
-const LabelPost = require("../models/label-post");
-const UserBlog = require("../models/user-blog");
-const Comment = require("../models/comment");
-const Post = require("../models/post");
+const { Comment, UserFollowBlog, PostLabel, Post } = require("../models");
 const { pick } = require("lodash");
 const { ObjectId } = require("mongoose").Types;
+const { assertRule } = require("../utils");
 
 function isDate(v) {
   return Object.prototype.toString.call(v) === "[object Date]";
@@ -11,54 +9,70 @@ function isDate(v) {
 
 module.exports = router => {
   // create a post
-  router.post("/post", (req, res, next) => {
-    const obj = pick(req.body, ["title", "body", "status", "blogId"]);
+  router.post(
+    "/post",
+    assertRule("CREATE", "Blog", req => req.body.blogId),
+    (req, res, next) => {
+      const obj = pick(req.body, ["title", "body", "status", "blogId"]);
 
-    obj.createdBy = req.decoded._id;
+      obj.owner = req.decoded._id;
 
-    const post = new Post(obj);
+      const post = new Post(obj);
 
-    post
-      .save()
-      .then(post => res.json(post))
-      .catch(next);
-  });
+      post
+        .save()
+        .then(post => res.json(post))
+        .catch(next);
+    }
+  );
 
   // delete a post
-  router.delete("/post/:id", (req, res, next) => {
-    const postId = req.params.id;
+  router.delete(
+    "/post/:id",
+    assertRule("DELETE", "Post", req => req.params.id),
+    (req, res, next) => {
+      const postId = req.params.id;
 
-    Post.remove({ _id: postId })
-      .then(result => res.json(result))
-      .catch(next);
-  });
+      Post.remove({ _id: postId })
+        .then(result => res.json(result))
+        .catch(next);
+    }
+  );
 
   // publish a post
-  router.put("/post/:id/publish", (req, res, next) => {
-    const { id: postId } = req.params;
-    const options = { new: true };
-    const obj = {
-      status: "PUBLISHED",
-      updatedAt: Date.now()
-    };
+  router.put(
+    "/post/:id/publish",
+    assertRule("UPDATE", "Post", req => req.params.id),
+    (req, res, next) => {
+      const { id: postId } = req.params;
+      const options = { new: true };
+      const obj = {
+        status: "PUBLISHED",
+        updatedAt: Date.now()
+      };
 
-    Post.findByIdAndUpdate(postId, obj, options)
-      .then(post => res.json(post))
-      .catch(next);
-  });
+      Post.findByIdAndUpdate(postId, obj, options)
+        .then(post => res.json(post))
+        .catch(next);
+    }
+  );
 
   // edit a post
-  router.put("/post/:id", (req, res, next) => {
-    const postId = req.params.id;
-    const options = { new: true };
-    const obj = pick(req.body, ["title", "body"]);
+  router.put(
+    "/post/:id",
+    assertRule("UPDATE", "Post", req => req.params.id),
+    (req, res, next) => {
+      const postId = req.params.id;
+      const options = { new: true };
+      const obj = pick(req.body, ["title", "body"]);
 
-    obj.updatedAt = Date.now();
+      obj.updatedAt = Date.now();
 
-    Post.findByIdAndUpdate(postId, obj, options)
-      .then(post => res.json(post))
-      .catch(next);
-  });
+      Post.findByIdAndUpdate(postId, obj, options)
+        .then(post => res.json(post))
+        .catch(next);
+    }
+  );
 
   // get a post
   router.get("/post/:id", (req, res, next) => {
@@ -82,7 +96,7 @@ module.exports = router => {
     const postId = req.params.id;
     const postPromise = Post.findById(postId).lean();
     const commentsPromise = Comment.find({ postId });
-    const labelsPromise = LabelPost.find({ postId });
+    const labelsPromise = PostLabel.find({ postId });
 
     Promise.all([postPromise, commentsPromise, labelsPromise])
       .then(([post, comments, labels]) => {
@@ -133,45 +147,49 @@ module.exports = router => {
   });
 
   // list posts from their own blogs and the blogs they follow
-  router.get("/feed", (req, res, next) => {
-    const userId = req.decoded._id;
+  router.get(
+    "/user/:userId/feed",
+    assertRule("USER_FEED", "User", req => req.params.userId),
+    (req, res, next) => {
+      const userId = req.decoded._id;
 
-    UserBlog.aggregate([
-      {
-        $lookup: {
-          from: "posts",
-          localField: "blogId",
-          foreignField: "blogId",
-          as: "post_docs"
+      UserBlog.aggregate([
+        {
+          $lookup: {
+            from: "posts",
+            localField: "blogId",
+            foreignField: "blogId",
+            as: "post_docs"
+          }
+        },
+        { $limit: 20 },
+        { $unwind: "$post_docs" },
+        { $sort: { "post_docs.createdAt": -1 } },
+        {
+          $match: {
+            $or: [
+              {
+                userId: ObjectId(userId)
+              },
+              { "post_docs.owner": ObjectId(userId) }
+            ],
+            "post_docs.status": "PUBLISHED"
+          }
+        },
+        {
+          $project: {
+            userId: 1,
+            "post_docs._id": 1,
+            "post_docs.blogId": 1,
+            "post_docs.title": 1,
+            "post_docs.body": 1,
+            "post_docs.status": 1,
+            "post_docs.createdAt": 1
+          }
         }
-      },
-      { $limit: 20 },
-      { $unwind: "$post_docs" },
-      { $sort: { "post_docs.createdAt": -1 } },
-      {
-        $match: {
-          $or: [
-            {
-              userId: ObjectId(userId)
-            },
-            { "post_docs.createdBy": ObjectId(userId) }
-          ],
-          "post_docs.status": "PUBLISHED"
-        }
-      },
-      {
-        $project: {
-          userId: 1,
-          "post_docs._id": 1,
-          "post_docs.blogId": 1,
-          "post_docs.title": 1,
-          "post_docs.body": 1,
-          "post_docs.status": 1,
-          "post_docs.createdAt": 1
-        }
-      }
-    ])
-      .then(posts => res.json(posts))
-      .catch(next);
-  });
+      ])
+        .then(posts => res.json(posts))
+        .catch(next);
+    }
+  );
 };

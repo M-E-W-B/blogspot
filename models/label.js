@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// @NOTE: Owner of a Label is the user who created it
 const labelSchema = new Schema({
   txt: { type: String, required: true },
-  createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+  owner: { type: Schema.Types.ObjectId, ref: "User" },
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
 });

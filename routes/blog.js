@@ -1,14 +1,13 @@
-const Post = require("../models/post");
-const UserBlog = require("../models/user-blog");
-const Blog = require("../models/blog");
 const { pick } = require("lodash");
+const { Blog, UserFollowBlog, Post } = require("../models");
+const { assertRule } = require("../utils");
 
 module.exports = router => {
   // create a blog
   router.post("/blog", (req, res, next) => {
     const obj = pick(req.body, ["subdomain", "name", "description", "status"]);
 
-    obj.createdBy = req.decoded._id;
+    obj.owner = req.decoded._id;
 
     const blog = new Blog(obj);
 
@@ -19,40 +18,53 @@ module.exports = router => {
   });
 
   // delete a blog
-  router.delete("/blog/:id", (req, res, next) => {
-    const blogId = req.params.id;
+  // @TODO: implement delete using deletedAt
+  router.delete(
+    "/blog/:id",
+    assertRule("DELETE", "Blog", req => req.params.id),
+    (req, res, next) => {
+      const blogId = req.params.id;
 
-    Blog.remove({ _id: blogId })
-      .then(result => res.json(result))
-      .catch(next);
-  });
+      Blog.remove({ _id: blogId })
+        .then(result => res.json(result))
+        .catch(next);
+    }
+  );
 
   // mark the status of a blog i.e. active, inactive
-  router.put("/blog/:id/status/:status", (req, res, next) => {
-    const { id: blogId, status } = req.params;
-    const options = { new: true };
-    const obj = {
-      status,
-      updatedAt: Date.now()
-    };
+  router.put(
+    "/blog/:id/status/:status",
+    assertRule("UPDATE", "Blog", req => req.params.id),
+    (req, res, next) => {
+      const { id: blogId, status } = req.params;
+      const options = { new: true };
+      const obj = {
+        status,
+        updatedAt: Date.now()
+      };
 
-    Blog.findByIdAndUpdate(blogId, obj, options)
-      .then(blog => res.json(blog))
-      .catch(next);
-  });
+      Blog.findByIdAndUpdate(blogId, obj, options)
+        .then(blog => res.json(blog))
+        .catch(next);
+    }
+  );
 
   // update a blog
-  router.put("/blog/:id", (req, res, next) => {
-    const blogId = req.params.id;
-    const options = { new: true };
-    const obj = pick(req.body, ["name", "description"]);
+  router.put(
+    "/blog/:id",
+    assertRule("UPDATE", "Blog", req => req.params.id),
+    (req, res, next) => {
+      const blogId = req.params.id;
+      const options = { new: true };
+      const obj = pick(req.body, ["name", "description"]);
 
-    obj.updatedAt = Date.now();
+      obj.updatedAt = Date.now();
 
-    Blog.findByIdAndUpdate(blogId, obj, options)
-      .then(blog => res.json(blog))
-      .catch(next);
-  });
+      Blog.findByIdAndUpdate(blogId, obj, options)
+        .then(blog => res.json(blog))
+        .catch(next);
+    }
+  );
 
   // basic blog details
   router.get("/blog/:id", (req, res, next) => {
@@ -68,7 +80,7 @@ module.exports = router => {
     const blogId = req.params.id;
     const blogPromise = Blog.findById(blogId).lean();
     const postCountPromise = Post.count({ blogId });
-    const followerCountPromise = UserBlog.count({ blogId });
+    const followerCountPromise = UserFollowBlog.count({ blogId });
 
     Promise.all([blogPromise, postCountPromise, followerCountPromise])
       .then(([blog, postCount, followerCount]) => {
@@ -114,7 +126,7 @@ module.exports = router => {
     const sortOptions = sort ? { [sort]: 1 } : {};
     const userId = req.decoded._id;
 
-    Blog.find({ createdBy: userId, status })
+    Blog.find({ owner: userId, status })
       .sort(sortOptions)
       .then(blogs => res.json(blogs))
       .catch(next);

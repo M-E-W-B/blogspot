@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { pick } = require("lodash");
-const User = require("../models/user");
+const { User } = require("../models");
 const config = require("../config");
 
 module.exports = router => {

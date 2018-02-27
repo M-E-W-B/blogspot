@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // set up a mongoose model
+// @NOTE: Owner of a Comment is the user who created it
 module.exports = mongoose.model(
   "Comment",
   new Schema({
@@ -11,7 +12,7 @@ module.exports = mongoose.model(
       ref: "Post",
       required: true
     },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+    owner: { type: Schema.Types.ObjectId, ref: "User" },
     updatedAt: { type: Date },
     createdAt: { type: Date, default: Date.now }
   })

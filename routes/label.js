@@ -1,12 +1,13 @@
-const Label = require("../models/label");
+const { Label } = require("../models");
 const { pick } = require("lodash");
+const { assertRule } = require("../utils");
 
 module.exports = router => {
   // create a label
   router.post("/label", (req, res, next) => {
     const obj = pick(req.body, ["txt"]);
 
-    obj.createdBy = req.decoded._id;
+    obj.owner = req.decoded._id;
 
     const label = new Label(obj);
 
@@ -17,26 +18,34 @@ module.exports = router => {
   });
 
   // delete a label
-  router.delete("/label/:id", (req, res, next) => {
-    const labelId = req.params.id;
+  router.delete(
+    "/label/:id",
+    assertRule("DELETE", "Label", req => req.params.id),
+    (req, res, next) => {
+      const labelId = req.params.id;
 
-    Label.remove({ _id: labelId })
-      .then(result => res.json(result))
-      .catch(next);
-  });
+      Label.remove({ _id: labelId })
+        .then(result => res.json(result))
+        .catch(next);
+    }
+  );
 
   // edit a label
-  router.put("/label/:id", (req, res, next) => {
-    const labelId = req.params.id;
-    const options = { new: true };
-    const obj = pick(req.body, ["txt"]);
+  router.put(
+    "/label/:id",
+    assertRule("UPDATE", "Label", req => req.params.id),
+    (req, res, next) => {
+      const labelId = req.params.id;
+      const options = { new: true };
+      const obj = pick(req.body, ["txt"]);
 
-    obj.updatedAt = Date.now();
+      obj.updatedAt = Date.now();
 
-    Label.findByIdAndUpdate(labelId, obj, options)
-      .then(label => res.json(label))
-      .catch(next);
-  });
+      Label.findByIdAndUpdate(labelId, obj, options)
+        .then(label => res.json(label))
+        .catch(next);
+    }
+  );
 
   // get a label
   router.get("/label/:id", (req, res, next) => {

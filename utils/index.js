@@ -1,3 +1,4 @@
 module.exports = {
-  MongooseConnect: require("./db")
+  MongooseConnect: require("./db"),
+  assertRule: require("./assert-rule")
 };

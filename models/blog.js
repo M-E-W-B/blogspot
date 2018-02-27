@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// @NOTE: Owner of a Blog is the user who created it
 const blogSchema = new Schema({
   subdomain: { type: String, required: true },
   name: { type: String, required: true },
@@ -10,7 +11,7 @@ const blogSchema = new Schema({
     enum: ["ACTIVE", "INACTIVE"],
     default: "ACTIVE"
   },
-  createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+  owner: { type: Schema.Types.ObjectId, ref: "User" },
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
 });

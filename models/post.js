@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// @NOTE: Owner of a Post is the user who created it
 const postSchema = new Schema({
   title: { type: String, required: true },
   body: { type: String, required: true },
@@ -14,7 +15,7 @@ const postSchema = new Schema({
     ref: "Blog",
     required: true
   },
-  createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+  owner: { type: Schema.Types.ObjectId, ref: "User" },
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
 });

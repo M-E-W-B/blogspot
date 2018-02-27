@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt-nodejs");
 const Schema = mongoose.Schema;
 
+// @NOTE: Owner of a user is the user itself
 const userSchema = new Schema({
   name: { type: String, required: true },
   about: { type: String },
@@ -31,9 +32,14 @@ const userSchema = new Schema({
     type: String,
     enum: ["MALE", "FEMALE"]
   },
-  createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+  owner: { type: Schema.Types.ObjectId, ref: "User" },
   updatedAt: { type: Date },
   createdAt: { type: Date, default: Date.now }
+});
+
+userSchema.post("validate", function(doc, next) {
+  doc.owner = doc._id;
+  next();
 });
 
 userSchema.methods.generateHash = function(password) {

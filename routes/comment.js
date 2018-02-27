@@ -1,12 +1,13 @@
-const Comment = require("../models/comment");
+const { Comment } = require("../models");
 const { pick } = require("lodash");
+const { assertRule } = require("../utils");
 
 module.exports = router => {
   // add a comment to a post
   router.post("/comment", (req, res, next) => {
     const obj = pick(req.body, ["txt", "postId"]);
 
-    obj.createdBy = req.decoded._id;
+    obj.owner = req.decoded._id;
 
     const comment = new Comment(obj);
 
@@ -17,26 +18,34 @@ module.exports = router => {
   });
 
   // delete a comment
-  router.delete("/comment/:id", (req, res, next) => {
-    const commentId = req.params.id;
+  router.delete(
+    "/comment/:id",
+    assertRule("DELETE", "Comment", req => req.params.id),
+    (req, res, next) => {
+      const commentId = req.params.id;
 
-    Comment.remove({ _id: commentId })
-      .then(result => res.json(result))
-      .catch(next);
-  });
+      Comment.remove({ _id: commentId })
+        .then(result => res.json(result))
+        .catch(next);
+    }
+  );
 
   // edit a comment
-  router.put("/comment/:id", (req, res, next) => {
-    const commentId = req.params.id;
-    const options = { new: true };
-    const obj = pick(req.body, ["txt"]);
+  router.put(
+    "/comment/:id",
+    assertRule("UPDATE", "Comment", req => req.params.id),
+    (req, res, next) => {
+      const commentId = req.params.id;
+      const options = { new: true };
+      const obj = pick(req.body, ["txt"]);
 
-    obj.updatedAt = Date.now();
+      obj.updatedAt = Date.now();
 
-    Comment.findByIdAndUpdate(commentId, obj, options)
-      .then(comment => res.json(comment))
-      .catch(next);
-  });
+      Comment.findByIdAndUpdate(commentId, obj, options)
+        .then(comment => res.json(comment))
+        .catch(next);
+    }
+  );
 
   // get a comment
   router.get("/comment/:id", (req, res, next) => {

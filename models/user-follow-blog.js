@@ -16,7 +16,6 @@ module.exports = mongoose.model(
       ref: "Blog",
       required: true
     },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User" },
     updatedAt: { type: Date },
     createdAt: { type: Date, default: Date.now }
   })

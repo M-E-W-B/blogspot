@@ -1,15 +1,20 @@
-const User = require("../models/user");
+const { User } = require("../models");
 const { pick } = require("lodash");
+const { assertRule } = require("../utils");
 
 module.exports = router => {
   // delete a user
-  router.delete("/user/:id", (req, res, next) => {
-    const userId = req.params.id;
+  router.delete(
+    "/user/:id",
+    assertRule("DELETE", "User", req => req.params.id),
+    (req, res, next) => {
+      const userId = req.params.id;
 
-    User.remove({ _id: userId })
-      .then(result => res.json(result))
-      .catch(next);
-  });
+      User.remove({ _id: userId })
+        .then(result => res.json(result))
+        .catch(next);
+    }
+  );
 
   // get a user
   router.get("/user/:id", (req, res, next) => {
@@ -21,17 +26,27 @@ module.exports = router => {
   });
 
   // edit basic details of a user
-  router.put("/user/:id", (req, res, next) => {
-    const userId = req.params.id;
-    const options = { new: true };
-    const obj = pick(req.body, ["name", "about", "website", "image", "gender"]);
+  router.put(
+    "/user/:id",
+    assertRule("UPDATE", "User", req => req.params.id),
+    (req, res, next) => {
+      const userId = req.params.id;
+      const options = { new: true };
+      const obj = pick(req.body, [
+        "name",
+        "about",
+        "website",
+        "image",
+        "gender"
+      ]);
 
-    obj.updatedAt = Date.now();
+      obj.updatedAt = Date.now();
 
-    User.findByIdAndUpdate(userId, obj, options)
-      .then(user => res.json(user))
-      .catch(next);
-  });
+      User.findByIdAndUpdate(userId, obj, options)
+        .then(user => res.json(user))
+        .catch(next);
+    }
+  );
 
   // get all the users (paginated) in the database
   router.get("/user", (req, res, next) => {
