@@ -11,7 +11,7 @@ module.exports = router => {
   // create a post
   router.post(
     "/post",
-    assertRule("CREATE", "Blog", req => req.body.blogId),
+    assertRule("create", "Blog", req => req.body.blogId),
     (req, res, next) => {
       const obj = pick(req.body, ["title", "body", "status", "blogId"]);
 
@@ -29,7 +29,7 @@ module.exports = router => {
   // delete a post
   router.delete(
     "/post/:id",
-    assertRule("DELETE", "Post", req => req.params.id),
+    assertRule("delete", "Post", req => req.params.id),
     (req, res, next) => {
       const postId = req.params.id;
 
@@ -42,12 +42,12 @@ module.exports = router => {
   // publish a post
   router.put(
     "/post/:id/publish",
-    assertRule("UPDATE", "Post", req => req.params.id),
+    assertRule("publish_post", "Post", req => req.params.id),
     (req, res, next) => {
       const { id: postId } = req.params;
       const options = { new: true };
       const obj = {
-        status: "PUBLISHED",
+        status: "published",
         updatedAt: Date.now()
       };
 
@@ -60,7 +60,7 @@ module.exports = router => {
   // edit a post
   router.put(
     "/post/:id",
-    assertRule("UPDATE", "Post", req => req.params.id),
+    assertRule("update", "Post", req => req.params.id),
     (req, res, next) => {
       const postId = req.params.id;
       const options = { new: true };
@@ -84,8 +84,8 @@ module.exports = router => {
   });
 
   // get comments of a post
-  router.get("/post/:id/comment", (req, res, next) => {
-    const postId = req.params.id;
+  router.get("/post/:postId/comment", (req, res, next) => {
+    const postId = req.params.postId;
     Comment.find({ postId })
       .then(comments => res.json(comments))
       .catch(next);
@@ -149,7 +149,7 @@ module.exports = router => {
   // list posts from their own blogs and the blogs they follow
   router.get(
     "/user/:userId/feed",
-    assertRule("USER_FEED", "User", req => req.params.userId),
+    assertRule("user_feed", "User", req => req.params.userId),
     (req, res, next) => {
       const userId = req.decoded._id;
 
@@ -173,7 +173,7 @@ module.exports = router => {
               },
               { "post_docs.owner": ObjectId(userId) }
             ],
-            "post_docs.status": "PUBLISHED"
+            "post_docs.status": "published"
           }
         },
         {

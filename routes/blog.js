@@ -18,10 +18,9 @@ module.exports = router => {
   });
 
   // delete a blog
-  // @TODO: implement delete using deletedAt
   router.delete(
     "/blog/:id",
-    assertRule("DELETE", "Blog", req => req.params.id),
+    assertRule("delete", "Blog", req => req.params.id),
     (req, res, next) => {
       const blogId = req.params.id;
 
@@ -34,7 +33,7 @@ module.exports = router => {
   // mark the status of a blog i.e. active, inactive
   router.put(
     "/blog/:id/status/:status",
-    assertRule("UPDATE", "Blog", req => req.params.id),
+    assertRule("update_blog_status", "Blog", req => req.params.id),
     (req, res, next) => {
       const { id: blogId, status } = req.params;
       const options = { new: true };
@@ -52,7 +51,7 @@ module.exports = router => {
   // update a blog
   router.put(
     "/blog/:id",
-    assertRule("UPDATE", "Blog", req => req.params.id),
+    assertRule("update", "Blog", req => req.params.id),
     (req, res, next) => {
       const blogId = req.params.id;
       const options = { new: true };
@@ -94,7 +93,7 @@ module.exports = router => {
   // list of all posts of a blog (paginated)
   router.get("/blog/:blogId/post", (req, res, next) => {
     const { blogId } = req.params;
-    const { sort, status = "ACTIVE", search } = req.query;
+    const { sort, status = "active", search } = req.query;
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
@@ -121,20 +120,24 @@ module.exports = router => {
   });
 
   // list of all blogs of user
-  router.get("/blog/user/list", (req, res, next) => {
-    const { status = "ACTIVE", sort } = req.query;
-    const sortOptions = sort ? { [sort]: 1 } : {};
-    const userId = req.decoded._id;
+  router.get(
+    "/user/:userId/blog",
+    assertRule("list_user_blogs", "User", req => req.params.userId),
+    (req, res, next) => {
+      const { status = "active", sort } = req.query;
+      const sortOptions = sort ? { [sort]: 1 } : {};
+      const userId = req.decoded._id;
 
-    Blog.find({ owner: userId, status })
-      .sort(sortOptions)
-      .then(blogs => res.json(blogs))
-      .catch(next);
-  });
+      Blog.find({ owner: userId, status })
+        .sort(sortOptions)
+        .then(blogs => res.json(blogs))
+        .catch(next);
+    }
+  );
 
   // list of all blogs (paginated)
-  router.get("/blog", (req, res, next) => {
-    const { sort, status = "ACTIVE", search } = req.query;
+  router.get("/blog", assertRule("list", "Blog"), (req, res, next) => {
+    const { sort, status = "active", search } = req.query;
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};

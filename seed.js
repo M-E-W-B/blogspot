@@ -24,7 +24,7 @@ const users = [
     email: "evan@yahoo.com",
     website: "http://gage.info",
     image: "https://s3.amazonaws.com/uifaces/faces/twitter/zvchkelly/128.jpg",
-    gender: "MALE"
+    gender: "male"
   },
   {
     _id: ObjectId(),
@@ -34,7 +34,7 @@ const users = [
     email: "rhonda@google.com",
     website: "https://samson.net",
     image: "https://s3.amazonaws.com/uifaces/faces/twitter/mylesb/128.jpg",
-    gender: "FEMALE"
+    gender: "female"
   },
   {
     _id: ObjectId(),
@@ -46,7 +46,7 @@ const users = [
     website: "http://patricia.biz",
     image:
       "https://s3.amazonaws.com/uifaces/faces/twitter/bistrianiosip/128.jpg",
-    gender: "MALE"
+    gender: "male"
   }
 ];
 
@@ -58,7 +58,7 @@ const blogs = [
     description:
       "Consequatur molestiae vitae ducimus consectetur modi. Voluptates totam quam ducimus sequi aliquid earum ut. Omnis facilis corrupti illum.",
     owner: users[0]._id,
-    status: "ACTIVE"
+    status: "active"
   },
   {
     _id: ObjectId(),
@@ -67,7 +67,7 @@ const blogs = [
     description:
       "Unde aut asperiores nisi libero voluptatem aperiam tenetur excepturi molestiae. Optio consequatur pariatur. Maiores distinctio rerum dolorem sit officia. Eos sed qui eaque tempora nobis nesciunt nesciunt molestiae. Non error quo deserunt.",
     owner: users[1]._id,
-    status: "ACTIVE"
+    status: "active"
   }
 ];
 
@@ -77,7 +77,7 @@ const posts = [
     title: "blog post title #1",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "DRAFTED",
+    status: "drafted",
     blogId: blogs[0]._id,
     owner: users[0]._id
   },
@@ -86,7 +86,7 @@ const posts = [
     title: "blog post title #2",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "DRAFTED",
+    status: "drafted",
     blogId: blogs[0]._id,
     owner: users[0]._id
   },
@@ -95,7 +95,7 @@ const posts = [
     title: "blog post title #3",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "DRAFTED",
+    status: "drafted",
     blogId: blogs[0]._id,
     owner: users[0]._id
   },
@@ -104,7 +104,7 @@ const posts = [
     title: "blog post title #4",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "DRAFTED",
+    status: "drafted",
     blogId: blogs[0]._id,
     owner: users[0]._id
   },
@@ -113,7 +113,7 @@ const posts = [
     title: "blog post title #5",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "DRAFTED",
+    status: "drafted",
     blogId: blogs[0]._id,
     owner: users[0]._id
   },
@@ -122,7 +122,7 @@ const posts = [
     title: "blog post title #6",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[1]._id,
     owner: users[1]._id
   },
@@ -131,7 +131,7 @@ const posts = [
     title: "blog post title #8",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[1]._id,
     owner: users[1]._id
   },
@@ -140,7 +140,7 @@ const posts = [
     title: "blog post title #9",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[1]._id,
     owner: users[1]._id
   },
@@ -149,7 +149,7 @@ const posts = [
     title: "blog post title #10",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[1]._id,
     owner: users[1]._id
   },
@@ -158,7 +158,7 @@ const posts = [
     title: "blog post title #11",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[1]._id,
     owner: users[1]._id
   },
@@ -167,7 +167,7 @@ const posts = [
     title: "blog post title #12",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[1]._id,
     owner: users[1]._id
   },
@@ -176,7 +176,7 @@ const posts = [
     title: "blog post title #13",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[1]._id,
     owner: users[1]._id
   },
@@ -185,7 +185,7 @@ const posts = [
     title: "blog post title #21",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[0]._id,
     owner: users[0]._id
   },
@@ -194,7 +194,7 @@ const posts = [
     title: "blog post title #22",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[0]._id,
     owner: users[0]._id
   },
@@ -203,7 +203,7 @@ const posts = [
     title: "blog post title #24",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[0]._id,
     owner: users[0]._id
   },
@@ -212,7 +212,7 @@ const posts = [
     title: "blog post title #25",
     body:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    status: "PUBLISHED",
+    status: "published",
     blogId: blogs[0]._id,
     owner: users[0]._id
   }
@@ -389,159 +389,201 @@ const rules = [
     description: "Anything on a Blog",
     operation: "*",
     modelname: "Blog",
-    accessType: "GROUP",
+    accessType: "group",
     groupId: groups[0]._id
   },
   {
     _id: ObjectId(),
     description: "Update a Blog",
-    operation: "UPDATE",
+    operation: "update",
     modelname: "Blog",
-    accessType: "OWNER"
+    accessType: "owner"
+  },
+  {
+    _id: ObjectId(),
+    description: "Update a Blog status",
+    operation: "update_blog_status",
+    modelname: "Blog",
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Delete a Blog",
-    operation: "DELETE",
+    operation: "delete",
     modelname: "Blog",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Anything on a Comment",
     operation: "*",
     modelname: "Comment",
-    accessType: "GROUP",
+    accessType: "group",
     groupId: groups[0]._id
   },
   {
     _id: ObjectId(),
     description: "Update a Comment",
-    operation: "UPDATE",
+    operation: "update",
     modelname: "Comment",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Delete a Comment",
-    operation: "DELETE",
+    operation: "delete",
     modelname: "Comment",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Anything on a Label",
     operation: "*",
     modelname: "Label",
-    accessType: "GROUP",
+    accessType: "group",
     groupId: groups[0]._id
   },
   {
     _id: ObjectId(),
     description: "Update a Label",
-    operation: "UPDATE",
+    operation: "update",
     modelname: "Label",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Delete a Label",
-    operation: "DELETE",
+    operation: "delete",
     modelname: "Label",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Anything on a Post",
     operation: "*",
     modelname: "Post",
-    accessType: "GROUP",
+    accessType: "group",
     groupId: groups[0]._id
   },
   {
     _id: ObjectId(),
     description: "Create a Post",
-    operation: "CREATE",
+    operation: "create",
     modelname: "Blog",
-    accessType: "OWNER"
+    accessType: "owner"
+  },
+  {
+    _id: ObjectId(),
+    description: "Add a Label to a Post",
+    operation: "post_add_label",
+    modelname: "Post",
+    accessType: "owner"
+  },
+  {
+    _id: ObjectId(),
+    description: "Remove a Label from a Post",
+    operation: "post_remove_label",
+    modelname: "Post",
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Update a Post",
-    operation: "UPDATE",
+    operation: "update",
     modelname: "Post",
-    accessType: "OWNER"
+    accessType: "owner"
+  },
+  {
+    _id: ObjectId(),
+    description: "Publish a Post",
+    operation: "post_publish",
+    modelname: "Post",
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Delete a Post",
-    operation: "DELETE",
+    operation: "delete",
     modelname: "Post",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Anything on a User",
     operation: "*",
     modelname: "User",
-    accessType: "GROUP",
+    accessType: "group",
     groupId: groups[0]._id
   },
   {
     _id: ObjectId(),
     description: "Update a User",
-    operation: "UPDATE",
+    operation: "update",
     modelname: "User",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Delete a User",
-    operation: "DELETE",
+    operation: "delete",
     modelname: "User",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "List groups of a User",
-    operation: "LIST_USER_GROUPS",
+    operation: "list_user_groups",
     modelname: "User",
-    accessType: "OWNER"
+    accessType: "owner"
+  },
+  {
+    _id: ObjectId(),
+    description: "List users of a Group",
+    operation: "list_group_users",
+    modelname: "Group",
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Feed of a User",
-    operation: "USER_FEED",
+    operation: "user_feed",
     modelname: "User",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "List of blogs that a User follows",
-    operation: "LIST_FOLLOW_BLOG",
+    operation: "list_user_follow_blogs",
     modelname: "User",
-    accessType: "OWNER"
+    accessType: "owner"
+  },
+  {
+    _id: ObjectId(),
+    description: "List of blogs of a User",
+    operation: "list_user_blogs",
+    modelname: "User",
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Follow a Blog",
-    operation: "FOLLOW_BLOG",
+    operation: "user_follow_blog",
     modelname: "User",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Unfollow a Blog",
-    operation: "UNFOLLOW_BLOG",
+    operation: "user_unfollow_blog",
     modelname: "User",
-    accessType: "OWNER"
+    accessType: "owner"
   },
   {
     _id: ObjectId(),
     description: "Anything on a Group",
     operation: "*",
     modelname: "Group",
-    accessType: "GROUP",
+    accessType: "group",
     groupId: groups[0]._id
   },
   {
@@ -549,7 +591,7 @@ const rules = [
     description: "Anything on a Rule",
     operation: "*",
     modelname: "Rule",
-    accessType: "GROUP",
+    accessType: "group",
     groupId: groups[0]._id
   }
 ];

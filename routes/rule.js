@@ -4,7 +4,7 @@ const { assertRule } = require("../utils");
 
 module.exports = router => {
   // create a rule
-  router.post("/rule", assertRule("CREATE", "Rule"), (req, res, next) => {
+  router.post("/rule", assertRule("create", "Rule"), (req, res, next) => {
     const obj = pick(req.body, [
       "description",
       "operation",
@@ -25,7 +25,7 @@ module.exports = router => {
   // delete a rule
   router.delete(
     "/rule/:id",
-    assertRule("DELETE", "Rule", req => req.params.id),
+    assertRule("delete", "Rule", req => req.params.id),
     (req, res, next) => {
       const ruleId = req.params.id;
 
@@ -38,7 +38,7 @@ module.exports = router => {
   // update a rule
   router.put(
     "/rule/:id",
-    assertRule("UPDATE", "Rule", req => req.params.id),
+    assertRule("update", "Rule", req => req.params.id),
     (req, res, next) => {
       const ruleId = req.params.id;
       const options = { new: true };
@@ -60,7 +60,7 @@ module.exports = router => {
   // rule details
   router.get(
     "/rule/:id",
-    assertRule("READ", "Rule", req => req.params.id),
+    assertRule("read", "Rule", req => req.params.id),
     (req, res, next) => {
       const ruleId = req.params.id;
 
@@ -71,7 +71,7 @@ module.exports = router => {
   );
 
   // list of rules
-  router.get("/rule", assertRule("LIST", "Rule"), (req, res, next) => {
+  router.get("/rule", assertRule("list", "Rule"), (req, res, next) => {
     Rule.find({})
       .then(rules => res.json(rules))
       .catch(next);

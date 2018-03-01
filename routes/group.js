@@ -4,7 +4,7 @@ const { assertRule } = require("../utils");
 
 module.exports = router => {
   // create a group
-  router.post("/group", assertRule("CREATE", "Group"), (req, res, next) => {
+  router.post("/group", assertRule("create", "Group"), (req, res, next) => {
     const obj = pick(req.body, ["name"]);
 
     obj.owner = req.decoded._id;
@@ -20,7 +20,7 @@ module.exports = router => {
   // delete a group
   router.delete(
     "/group/:id",
-    assertRule("DELETE", "Group", req => req.params.id),
+    assertRule("delete", "Group", req => req.params.id),
     (req, res, next) => {
       const groupId = req.params.id;
 
@@ -33,7 +33,7 @@ module.exports = router => {
   // update a group
   router.put(
     "/group/:id",
-    assertRule("UPDATE", "Group", req => req.params.id),
+    assertRule("update", "Group", req => req.params.id),
     (req, res, next) => {
       const groupId = req.params.id;
       const options = { new: true };

@@ -10,15 +10,15 @@ module.exports = (operation, modelname, rowResolver) => {
     const groupIds = groupMembers.map(gm => gm.groupId);
 
     const conditions = [
-      { accessType: "GROUP", groupId: { $in: groupIds } },
-      { accessType: "USER", userId }
+      { accessType: "group", groupId: { $in: groupIds } },
+      { accessType: "user", userId }
     ];
 
     if (isFunction(rowResolver)) {
       const _id = rowResolver(req);
       const Model = mongoose.model(modelname);
       const results = await Model.find({ _id, owner: userId });
-      results.length && conditions.push({ accessType: "OWNER" });
+      results.length && conditions.push({ accessType: "owner" });
     }
 
     const rules = await Rule.find({

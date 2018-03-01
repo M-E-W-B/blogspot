@@ -8,8 +8,8 @@ const blogSchema = new Schema({
   description: { type: String },
   status: {
     type: String,
-    enum: ["ACTIVE", "INACTIVE"],
-    default: "ACTIVE"
+    enum: ["active", "inactive"],
+    default: "active"
   },
   owner: { type: Schema.Types.ObjectId, ref: "User" },
   updatedAt: { type: Date },

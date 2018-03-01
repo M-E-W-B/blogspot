@@ -20,7 +20,7 @@ module.exports = router => {
   // delete a comment
   router.delete(
     "/comment/:id",
-    assertRule("DELETE", "Comment", req => req.params.id),
+    assertRule("delete", "Comment", req => req.params.id),
     (req, res, next) => {
       const commentId = req.params.id;
 
@@ -33,7 +33,7 @@ module.exports = router => {
   // edit a comment
   router.put(
     "/comment/:id",
-    assertRule("UPDATE", "Comment", req => req.params.id),
+    assertRule("update", "Comment", req => req.params.id),
     (req, res, next) => {
       const commentId = req.params.id;
       const options = { new: true };

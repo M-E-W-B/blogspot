@@ -30,7 +30,7 @@ const userSchema = new Schema({
   image: { type: String },
   gender: {
     type: String,
-    enum: ["MALE", "FEMALE"]
+    enum: ["male", "female"]
   },
   owner: { type: Schema.Types.ObjectId, ref: "User" },
   updatedAt: { type: Date },

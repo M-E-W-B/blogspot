@@ -20,7 +20,7 @@ module.exports = router => {
   // delete a label
   router.delete(
     "/label/:id",
-    assertRule("DELETE", "Label", req => req.params.id),
+    assertRule("delete", "Label", req => req.params.id),
     (req, res, next) => {
       const labelId = req.params.id;
 
@@ -33,7 +33,7 @@ module.exports = router => {
   // edit a label
   router.put(
     "/label/:id",
-    assertRule("UPDATE", "Label", req => req.params.id),
+    assertRule("update", "Label", req => req.params.id),
     (req, res, next) => {
       const labelId = req.params.id;
       const options = { new: true };

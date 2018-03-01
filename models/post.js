@@ -7,7 +7,7 @@ const postSchema = new Schema({
   body: { type: String, required: true },
   status: {
     type: String,
-    enum: ["DRAFTED", "PUBLISHED"],
+    enum: ["drafted", "published"],
     required: true
   },
   blogId: {

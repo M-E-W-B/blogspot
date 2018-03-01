@@ -6,7 +6,7 @@ module.exports = router => {
   // add blog to user follow list
   router.post(
     "/user/:userId/follows/:blogId/blog",
-    assertRule("FOLLOW_BLOG", "User", req => req.params.userId),
+    assertRule("user_follow_blog", "User", req => req.params.userId),
     (req, res, next) => {
       const obj = pick(req.params, ["blogId"]);
 
@@ -25,7 +25,7 @@ module.exports = router => {
   // remove a blog from user follow list
   router.delete(
     "/user/:userId/unfollows/:blogId/blog",
-    assertRule("UNFOLLOW_BLOG", "User", req => req.params.userId),
+    assertRule("user_unfollow_blog", "User", req => req.params.userId),
     (req, res, next) => {
       const blogId = req.params.blogId;
       const userId = req.decoded._id;
@@ -39,7 +39,7 @@ module.exports = router => {
   // get all the blogs that a user follows
   router.get(
     "/user/:userId/follows/blog",
-    assertRule("LIST_FOLLOW_BLOG", "User", req => req.params.userId),
+    assertRule("list_user_follow_blogs", "User", req => req.params.userId),
     (req, res, next) => {
       const userId = req.decoded._id;
       const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};

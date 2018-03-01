@@ -6,7 +6,7 @@ module.exports = router => {
   // delete a user
   router.delete(
     "/user/:id",
-    assertRule("DELETE", "User", req => req.params.id),
+    assertRule("delete", "User", req => req.params.id),
     (req, res, next) => {
       const userId = req.params.id;
 
@@ -28,7 +28,7 @@ module.exports = router => {
   // edit basic details of a user
   router.put(
     "/user/:id",
-    assertRule("UPDATE", "User", req => req.params.id),
+    assertRule("update", "User", req => req.params.id),
     (req, res, next) => {
       const userId = req.params.id;
       const options = { new: true };
@@ -49,7 +49,7 @@ module.exports = router => {
   );
 
   // get all the users (paginated) in the database
-  router.get("/user", (req, res, next) => {
+  router.get("/user", assertRule("list", "User"), (req, res, next) => {
     const page = req.query.page ? +req.query.page : 1;
     const limit = req.query.limit ? +req.query.limit : 10;
     const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};

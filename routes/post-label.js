@@ -6,7 +6,7 @@ module.exports = router => {
   // add a label to a post
   router.post(
     "/post/:postId/label/:labelId",
-    assertRule("CREATE", "Post", req => req.params.id),
+    assertRule("post_add_label", "Post", req => req.params.postId),
     (req, res, next) => {
       const obj = pick(req.params, ["postId", "labelId"]);
 
@@ -24,7 +24,7 @@ module.exports = router => {
   // delete a label from a post
   router.delete(
     "/post/:postId/label/:labelId",
-    assertRule("DELETE", "Post", req => req.params.id),
+    assertRule("post_remove_label", "Post", req => req.params.postId),
     (req, res, next) => {
       const { labelId, postId } = req.params;
 
