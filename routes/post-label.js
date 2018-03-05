@@ -28,7 +28,7 @@ module.exports = router => {
     (req, res, next) => {
       const { labelId, postId } = req.params;
 
-      PostLabel.remove({ labelId, postId })
+      PostLabel.findOneAndUpdate({ labelId, postId }, { deletedAt: Date.now() })
         .then(result => res.json(result))
         .catch(next);
     }
@@ -39,7 +39,7 @@ module.exports = router => {
     const { postId } = req.params;
     const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
-    PostLabel.find({ postId })
+    PostLabel.find({ postId, deletedAt: { $ne: null } })
       .populate("labelId")
       .sort(sortOptions)
       .then(postLabels => res.json(postLabels))

@@ -24,7 +24,7 @@ module.exports = router => {
     (req, res, next) => {
       const blogId = req.params.id;
 
-      Blog.remove({ _id: blogId })
+      Blog.findByIdAndUpdate(blogId, { deletedAt: Date.now() })
         .then(result => res.json(result))
         .catch(next);
     }
@@ -36,7 +36,7 @@ module.exports = router => {
     assertRule("update_blog_status", "Blog", req => req.params.id),
     (req, res, next) => {
       const { id: blogId, status } = req.params;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = {
         status,
         updatedAt: Date.now()
@@ -54,7 +54,7 @@ module.exports = router => {
     assertRule("update", "Blog", req => req.params.id),
     (req, res, next) => {
       const blogId = req.params.id;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = pick(req.body, ["name", "description"]);
 
       obj.updatedAt = Date.now();
@@ -98,7 +98,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
     let sortOptions = {};
-    let searchOptions = { status };
+    let searchOptions = { status, deletedAt: { $ne: null } };
 
     if (search) {
       sortOptions = scoreObj = { score: { $meta: "textScore" } };
@@ -128,7 +128,7 @@ module.exports = router => {
       const sortOptions = sort ? { [sort]: 1 } : {};
       const userId = req.decoded._id;
 
-      Blog.find({ owner: userId, status })
+      Blog.find({ owner: userId, status, deletedAt: { $ne: null } })
         .sort(sortOptions)
         .then(blogs => res.json(blogs))
         .catch(next);
@@ -142,7 +142,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
     let sortOptions = {};
-    let searchOptions = { status };
+    let searchOptions = { status, deletedAt: { $ne: null } };
 
     if (search) {
       sortOptions = scoreObj = { score: { $meta: "textScore" } };

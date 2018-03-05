@@ -16,6 +16,7 @@ module.exports = mongoose.model(
       ref: "Blog",
       required: true
     },
+    deletedAt: { type: Date, default: null },
     updatedAt: { type: Date },
     createdAt: { type: Date, default: Date.now }
   })

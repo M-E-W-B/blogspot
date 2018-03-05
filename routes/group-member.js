@@ -26,7 +26,10 @@ module.exports = router => {
     (req, res, next) => {
       const { groupId, userId } = req.params;
 
-      GroupMember.remove({ groupId, userId })
+      GroupMember.findOneAndUpdate(
+        { groupId, userId },
+        { deletedAt: Date.now() }
+      )
         .then(result => res.json(result))
         .catch(next);
     }
@@ -39,7 +42,7 @@ module.exports = router => {
     (req, res, next) => {
       const { groupId } = req.params;
 
-      GroupMember.find({ groupId })
+      GroupMember.find({ groupId, deletedAt: { $ne: null } })
         .populate("userId")
         .then(users => res.json(users))
         .catch(next);
@@ -53,7 +56,7 @@ module.exports = router => {
     (req, res, next) => {
       const { userId } = req.params;
 
-      GroupMember.find({ userId })
+      GroupMember.find({ userId, deletedAt: { $ne: null } })
         .populate("groupId")
         .then(groups => res.json(groups))
         .catch(next);

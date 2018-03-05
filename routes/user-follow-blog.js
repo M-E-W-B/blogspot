@@ -30,7 +30,10 @@ module.exports = router => {
       const blogId = req.params.blogId;
       const userId = req.decoded._id;
 
-      UserFollowBlog.remove({ blogId, userId })
+      UserFollowBlog.findOneAndUpdate(
+        { blogId, userId },
+        { deletedAt: Date.now() }
+      )
         .then(result => res.json(result))
         .catch(next);
     }
@@ -44,7 +47,7 @@ module.exports = router => {
       const userId = req.decoded._id;
       const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
-      UserFollowBlog.find({ userId })
+      UserFollowBlog.find({ userId, deletedAt: { $ne: null } })
         .sort(sortOptions)
         .populate("blogId")
         .then(userFollowBlogs => res.json(userFollowBlogs))

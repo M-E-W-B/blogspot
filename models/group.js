@@ -7,6 +7,9 @@ module.exports = mongoose.model(
   "Group",
   new Schema({
     name: String,
-    owner: { type: Schema.Types.ObjectId, ref: "User" }
+    owner: { type: Schema.Types.ObjectId, ref: "User" },
+    deletedAt: { type: Date, default: null },
+    updatedAt: { type: Date },
+    createdAt: { type: Date, default: Date.now }
   })
 );

@@ -41,6 +41,9 @@ module.exports = mongoose.model(
       enum: ["owner", "group", "user"]
     },
     groupId: { type: Schema.Types.ObjectId, ref: "Group" },
-    userId: { type: Schema.Types.ObjectId, ref: "User" }
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    deletedAt: { type: Date, default: null },
+    updatedAt: { type: Date },
+    createdAt: { type: Date, default: Date.now }
   })
 );

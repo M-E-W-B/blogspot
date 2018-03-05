@@ -24,7 +24,7 @@ module.exports = router => {
     (req, res, next) => {
       const commentId = req.params.id;
 
-      Comment.remove({ _id: commentId })
+      Comment.findByIdAndUpdate(commentId, { deletedAt: Date.now() })
         .then(result => res.json(result))
         .catch(next);
     }
@@ -36,7 +36,7 @@ module.exports = router => {
     assertRule("update", "Comment", req => req.params.id),
     (req, res, next) => {
       const commentId = req.params.id;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = pick(req.body, ["txt"]);
 
       obj.updatedAt = Date.now();
@@ -62,7 +62,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
-    Comment.find({})
+    Comment.find({ deletedAt: { $ne: null } })
       .sort(sortOptions)
       .skip(limit * page - limit)
       .limit(limit)

@@ -29,7 +29,7 @@ module.exports = router => {
     (req, res, next) => {
       const ruleId = req.params.id;
 
-      Rule.remove({ _id: ruleId })
+      Rule.findByIdAndUpdate(ruleId, { deletedAt: Date.now() })
         .then(result => res.json(result))
         .catch(next);
     }
@@ -41,7 +41,7 @@ module.exports = router => {
     assertRule("update", "Rule", req => req.params.id),
     (req, res, next) => {
       const ruleId = req.params.id;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = pick(req.body, [
         "description",
         "operation",
@@ -72,7 +72,7 @@ module.exports = router => {
 
   // list of rules
   router.get("/rule", assertRule("list", "Rule"), (req, res, next) => {
-    Rule.find({})
+    Rule.find({ deletedAt: { $ne: null } })
       .then(rules => res.json(rules))
       .catch(next);
   });

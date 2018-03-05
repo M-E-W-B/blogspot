@@ -24,7 +24,7 @@ module.exports = router => {
     (req, res, next) => {
       const groupId = req.params.id;
 
-      Group.remove({ _id: groupId })
+      Group.findByIdAndUpdate(groupId, { deletedAt: Date.now() })
         .then(result => res.json(result))
         .catch(next);
     }
@@ -36,7 +36,7 @@ module.exports = router => {
     assertRule("update", "Group", req => req.params.id),
     (req, res, next) => {
       const groupId = req.params.id;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = pick(req.body, ["name"]);
 
       Group.findByIdAndUpdate(groupId, obj, options)
@@ -56,7 +56,7 @@ module.exports = router => {
 
   // list of groups
   router.get("/group", (req, res, next) => {
-    Group.find({})
+    Group.find({ deletedAt: { $ne: null } })
       .then(groups => res.json(groups))
       .catch(next);
   });

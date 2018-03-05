@@ -33,7 +33,7 @@ module.exports = router => {
     (req, res, next) => {
       const postId = req.params.id;
 
-      Post.remove({ _id: postId })
+      Post.findByIdAndUpdate(postId, { deletedAt: Date.now() })
         .then(result => res.json(result))
         .catch(next);
     }
@@ -45,7 +45,7 @@ module.exports = router => {
     assertRule("publish_post", "Post", req => req.params.id),
     (req, res, next) => {
       const { id: postId } = req.params;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = {
         status: "published",
         updatedAt: Date.now()
@@ -63,7 +63,7 @@ module.exports = router => {
     assertRule("update", "Post", req => req.params.id),
     (req, res, next) => {
       const postId = req.params.id;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = pick(req.body, ["title", "body"]);
 
       obj.updatedAt = Date.now();
@@ -86,7 +86,7 @@ module.exports = router => {
   // get comments of a post
   router.get("/post/:postId/comment", (req, res, next) => {
     const postId = req.params.postId;
-    Comment.find({ postId })
+    Comment.find({ postId, deletedAt: { $ne: null } })
       .then(comments => res.json(comments))
       .catch(next);
   });
@@ -115,7 +115,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
     let sortOptions = {};
-    let searchOptions = {};
+    let searchOptions = { deletedAt: { $ne: null } };
 
     if (search) {
       sortOptions = scoreObj = { score: { $meta: "textScore" } };
@@ -173,7 +173,9 @@ module.exports = router => {
               },
               { "post_docs.owner": ObjectId(userId) }
             ],
-            "post_docs.status": "published"
+            "post_docs.status": "published",
+            deletedAt: { $ne: null },
+            "post_docs.deletedAt": { $ne: null }
           }
         },
         {

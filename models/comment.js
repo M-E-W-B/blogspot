@@ -13,6 +13,7 @@ module.exports = mongoose.model(
       required: true
     },
     owner: { type: Schema.Types.ObjectId, ref: "User" },
+    deletedAt: { type: Date, default: null },
     updatedAt: { type: Date },
     createdAt: { type: Date, default: Date.now }
   })

@@ -24,7 +24,7 @@ module.exports = router => {
     (req, res, next) => {
       const labelId = req.params.id;
 
-      Label.remove({ _id: labelId })
+      Label.findByIdAndUpdate(labelId, { deletedAt: Date.now() })
         .then(result => res.json(result))
         .catch(next);
     }
@@ -36,7 +36,7 @@ module.exports = router => {
     assertRule("update", "Label", req => req.params.id),
     (req, res, next) => {
       const labelId = req.params.id;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = pick(req.body, ["txt"]);
 
       obj.updatedAt = Date.now();
@@ -62,7 +62,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
     let sortOptions = {};
-    let searchOptions = {};
+    let searchOptions = { deletedAt: { $ne: null } };
 
     if (req.query.search) {
       sortOptions = scoreObj = { score: { $meta: "textScore" } };

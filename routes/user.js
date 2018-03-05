@@ -10,7 +10,7 @@ module.exports = router => {
     (req, res, next) => {
       const userId = req.params.id;
 
-      User.remove({ _id: userId })
+      User.findByIdAndUpdate(userId, { deletedAt: Date.now() })
         .then(result => res.json(result))
         .catch(next);
     }
@@ -31,7 +31,7 @@ module.exports = router => {
     assertRule("update", "User", req => req.params.id),
     (req, res, next) => {
       const userId = req.params.id;
-      const options = { new: true };
+      const options = { new: true, runValidators: true };
       const obj = pick(req.body, [
         "name",
         "about",
@@ -54,7 +54,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
-    User.find({})
+    User.find({ deletedAt: { $ne: null } })
       .sort(sortOptions)
       .skip(limit * page - limit)
       .limit(limit)
