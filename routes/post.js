@@ -86,7 +86,7 @@ module.exports = router => {
   // get comments of a post
   router.get("/post/:postId/comment", (req, res, next) => {
     const postId = req.params.postId;
-    Comment.find({ postId, deletedAt: { $ne: null } })
+    Comment.find({ postId, deletedAt: { $eq: null } })
       .then(comments => res.json(comments))
       .catch(next);
   });
@@ -115,7 +115,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
     let sortOptions = {};
-    let searchOptions = { deletedAt: { $ne: null } };
+    let searchOptions = { deletedAt: { $eq: null } };
 
     if (search) {
       sortOptions = scoreObj = { score: { $meta: "textScore" } };
@@ -174,7 +174,7 @@ module.exports = router => {
               { "post_docs.owner": ObjectId(userId) }
             ],
             "post_docs.status": "published",
-            deletedAt: { $ne: null },
+            deletedAt: { $eq: null },
             "post_docs.deletedAt": { $ne: null }
           }
         },

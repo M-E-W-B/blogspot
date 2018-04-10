@@ -47,7 +47,7 @@ module.exports = router => {
       const userId = req.decoded._id;
       const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
-      UserFollowBlog.find({ userId, deletedAt: { $ne: null } })
+      UserFollowBlog.find({ userId, deletedAt: { $eq: null } })
         .sort(sortOptions)
         .populate("blogId")
         .then(userFollowBlogs => res.json(userFollowBlogs))

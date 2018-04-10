@@ -54,7 +54,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
-    User.find({ deletedAt: { $ne: null } })
+    User.find({ deletedAt: { $eq: null } })
       .sort(sortOptions)
       .skip(limit * page - limit)
       .limit(limit)

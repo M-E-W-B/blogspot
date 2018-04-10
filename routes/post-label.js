@@ -39,7 +39,7 @@ module.exports = router => {
     const { postId } = req.params;
     const sortOptions = req.query.sort ? { [req.query.sort]: 1 } : {};
 
-    PostLabel.find({ postId, deletedAt: { $ne: null } })
+    PostLabel.find({ postId, deletedAt: { $eq: null } })
       .populate("labelId")
       .sort(sortOptions)
       .then(postLabels => res.json(postLabels))

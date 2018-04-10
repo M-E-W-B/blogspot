@@ -72,7 +72,7 @@ module.exports = router => {
 
   // list of rules
   router.get("/rule", assertRule("list", "Rule"), (req, res, next) => {
-    Rule.find({ deletedAt: { $ne: null } })
+    Rule.find({ deletedAt: { $eq: null } })
       .then(rules => res.json(rules))
       .catch(next);
   });

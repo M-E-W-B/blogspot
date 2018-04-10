@@ -637,5 +637,6 @@ MongooseConnect.open().then(async function() {
   await PostLabel.insertMany(postlabels);
   console.log("PostLabel added! 🐸");
 
+  process.exit();
   // MongooseConnect.close();
 });

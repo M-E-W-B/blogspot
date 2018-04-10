@@ -62,7 +62,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
     let sortOptions = {};
-    let searchOptions = { deletedAt: { $ne: null } };
+    let searchOptions = { deletedAt: { $eq: null } };
 
     if (req.query.search) {
       sortOptions = scoreObj = { score: { $meta: "textScore" } };

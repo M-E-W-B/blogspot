@@ -98,7 +98,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
     let sortOptions = {};
-    let searchOptions = { status, deletedAt: { $ne: null } };
+    let searchOptions = { status, deletedAt: { $eq: null } };
 
     if (search) {
       sortOptions = scoreObj = { score: { $meta: "textScore" } };
@@ -128,7 +128,7 @@ module.exports = router => {
       const sortOptions = sort ? { [sort]: 1 } : {};
       const userId = req.decoded._id;
 
-      Blog.find({ owner: userId, status, deletedAt: { $ne: null } })
+      Blog.find({ owner: userId, status, deletedAt: { $eq: null } })
         .sort(sortOptions)
         .then(blogs => res.json(blogs))
         .catch(next);
@@ -142,7 +142,7 @@ module.exports = router => {
     const limit = req.query.limit ? +req.query.limit : 10;
     let scoreObj = {};
     let sortOptions = {};
-    let searchOptions = { status, deletedAt: { $ne: null } };
+    let searchOptions = { status, deletedAt: { $eq: null } };
 
     if (search) {
       sortOptions = scoreObj = { score: { $meta: "textScore" } };

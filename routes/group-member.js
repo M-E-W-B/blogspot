@@ -42,7 +42,7 @@ module.exports = router => {
     (req, res, next) => {
       const { groupId } = req.params;
 
-      GroupMember.find({ groupId, deletedAt: { $ne: null } })
+      GroupMember.find({ groupId, deletedAt: { $eq: null } })
         .populate("userId")
         .then(users => res.json(users))
         .catch(next);
@@ -56,7 +56,7 @@ module.exports = router => {
     (req, res, next) => {
       const { userId } = req.params;
 
-      GroupMember.find({ userId, deletedAt: { $ne: null } })
+      GroupMember.find({ userId, deletedAt: { $eq: null } })
         .populate("groupId")
         .then(groups => res.json(groups))
         .catch(next);

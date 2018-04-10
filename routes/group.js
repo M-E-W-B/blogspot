@@ -56,7 +56,7 @@ module.exports = router => {
 
   // list of groups
   router.get("/group", (req, res, next) => {
-    Group.find({ deletedAt: { $ne: null } })
+    Group.find({ deletedAt: { $eq: null } })
       .then(groups => res.json(groups))
       .catch(next);
   });
